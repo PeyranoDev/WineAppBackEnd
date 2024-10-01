@@ -1,105 +1,112 @@
 # WineAppBackEnd
 
-WineAppBackEnd es una aplicación de gestión de inventario de vinos que permite registrar nuevos usuarios y vinos, así como consultar el inventario de vinos. La aplicación sigue una arquitectura de servicios con controladores independientes para la gestión de usuarios y vinos.
+**WineAppBackEnd** es una API para la gestión de inventario de vinos, diseñada para registrar usuarios, agregar vinos y consultar el stock disponible. La aplicación utiliza ASP.NET Core y sigue una arquitectura basada en servicios.
 
-## Estructura del Proyecto
+## Tabla de Contenidos
 
-El proyecto está dividido en varios componentes clave:
+- [Descripción](#descripción)
+- [Requisitos Previos](#requisitos-previos)
+- [Instalación](#instalación)
+- [Uso](#uso)
+- [Endpoints](#endpoints)
+  - [UserController](#usercontroller)
+  - [WineController](#winecontroller)
+- [Configuración](#configuración)
 
-- **Common**: Contiene modelos compartidos utilizados en la aplicación.
-- **Data**: Incluye las entidades principales como `User` y `Wine` y los repositorios para la lógica de acceso a datos.
-- **Services**: Implementa la lógica de negocio a través de servicios separados para `User` y `Wine`.
-- **WineAppBackEnd**: Contiene los controladores y la configuración principal de la API.
+## Descripción
 
-### Componentes principales
+Esta aplicación permite gestionar el inventario de vinos, proporcionando endpoints para agregar nuevos usuarios, registrar vinos y consultar el stock disponible. El proyecto está estructurado en capas para mejorar la mantenibilidad y escalabilidad del código.
 
-- **Common.Models**: Modelos comunes, como DTOs (`Data Transfer Objects`) que son utilizados para la comunicación entre el cliente y la API.
-- **Data.Entities**: Entidades que representan los modelos de dominio de la base de datos, como `User` y `Wine`.
-- **Services.UserServices**: Lógica de negocio relacionada con la gestión de usuarios.
-- **Services.WineServices**: Lógica de negocio relacionada con la gestión del inventario de vinos.
-- **Controllers**: Controladores API que manejan las solicitudes HTTP y delegan la lógica a los servicios.
+## Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalados los siguientes requisitos:
+
+- [SDK de .NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+- Un entorno de desarrollo (por ejemplo, [Visual Studio](https://visualstudio.microsoft.com/) o [VS Code](https://code.visualstudio.com/))
 
 ## Instalación
 
+Sigue estos pasos para poner en marcha el proyecto:
+
 1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/usuario/WineAppBackEnd.git
-   ```
 
-2. Navega al directorio del proyecto:
-   ```bash
-   cd WineAppBackEnd
-   ```
+    ```bash
+    git clone https://github.com/usuario/WineAppBackEnd.git
+    ```
 
-3. Restaura los paquetes NuGet:
-   ```bash
-   dotnet restore
-   ```
+2. Navega hasta el directorio del proyecto:
 
-4. Compila el proyecto:
-   ```bash
-   dotnet build
-   ```
+    ```bash
+    cd WineAppBackEnd
+    ```
 
-## Ejecución
+3. Restaura las dependencias del proyecto:
 
-1. Para ejecutar la aplicación en modo local:
-   ```bash
-   dotnet run
-   ```
+    ```bash
+    dotnet restore
+    ```
 
-2. La API estará disponible en `https://localhost:5001` por defecto.
+4. Compila la solución:
+
+    ```bash
+    dotnet build
+    ```
+
+## Uso
+
+Para ejecutar el servidor de la API en un entorno local:
+
+```bash
+dotnet run
+```
+
+La API estará disponible en `https://localhost:5001`. Puedes interactuar con los endpoints utilizando herramientas como [Postman](https://www.postman.com/) o [cURL](https://curl.se/).
 
 ## Endpoints
 
 ### UserController
 
-Maneja las operaciones relacionadas con los usuarios.
+Maneja la creación de usuarios en el sistema.
 
-- **POST `/api/user`**: Agrega un nuevo usuario.
+- **POST** `/api/user`: Agrega un nuevo usuario.
 
-  **Request Body:**
+  **Body de la solicitud:**
   ```json
   {
-    "username": "exampleUser",
-    "password": "examplePassword",
-    "email": "example@example.com"
+    "username": "john_doe",
+    "password": "mypassword123",
+    "email": "john.doe@example.com"
   }
   ```
 
-  **Responses:**
-  - `201 Created`: Si el usuario es creado exitosamente.
-  - `400 Bad Request`: Si el cuerpo de la solicitud es nulo o si el usuario ya existe.
+  **Posibles respuestas:**
+  - `201 Created`: Usuario creado correctamente.
+  - `400 Bad Request`: Si el usuario ya existe o el cuerpo de la solicitud es inválido.
 
 ### WineController
 
-Maneja las operaciones relacionadas con los vinos.
+Maneja las operaciones relacionadas con el inventario de vinos.
 
-- **POST `/api/wine`**: Agrega un nuevo vino al inventario.
+- **POST** `/api/wine`: Agrega un nuevo vino al inventario.
 
-  **Request Body:**
+  **Body de la solicitud:**
   ```json
   {
-    "name": "Cabernet Sauvignon",
-    "year": 2018,
-    "quantity": 100
+    "name": "Merlot",
+    "year": 2019,
+    "quantity": 50
   }
   ```
 
-  **Responses:**
-  - `201 Created`: Si el vino es agregado exitosamente.
-  - `400 Bad Request`: Si el cuerpo de la solicitud es nulo o si el vino ya existe.
+  **Posibles respuestas:**
+  - `201 Created`: Vino registrado correctamente.
+  - `400 Bad Request`: Si el vino ya está registrado o la solicitud es inválida.
 
-- **GET `/api/wine`**: Obtiene todo el stock de vinos.
+- **GET** `/api/wine`: Devuelve el inventario actual de vinos.
 
-  **Responses:**
-  - `200 OK`: Devuelve una lista de todos los vinos en stock.
+  **Posibles respuestas:**
+  - `200 OK`: Devuelve una lista con todos los vinos y sus cantidades en stock.
 
 ## Configuración
 
-La configuración de la aplicación se gestiona a través del archivo `appsettings.json`, donde puedes ajustar los detalles de la conexión a la base de datos y otros parámetros.
-
-## Dependencias
-
-- [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
-- ASP.NET Core para la construcción de APIs.
+El archivo de configuración `appsettings.json` se utiliza para definir las variables de entorno, como la conexión a la base de datos y otros parámetros relevantes. Asegúrate de actualizarlo con los valores correctos antes de ejecutar la aplicación en un entorno de producción.
